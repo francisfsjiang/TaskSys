@@ -1,0 +1,142 @@
+language: c++
+
+sudo: true
+
+cache:
+  directories:
+    - ${TRAVIS_BUILD_DIR}/deps/boost-1.66.0
+    - ${TRAVIS_BUILD_DIR}/deps/curl-7.59.0
+
+env:
+  global:
+    - MAKEFLAGS="-j 2"
+    - BOOST_VERSION="1.66.0"
+    - CURL_VERSION="7.59.0"
+
+matrix:
+  exclude:
+    - env: TRAVIS_EMPTY_JOB_WORKAROUND=true
+
+  include:
+    - os: osx
+      compiler: clang
+      osx_image: xcode9.2
+      env:
+        - CC_COMPILER=clang
+        - CXX_COMPILER=clang++
+
+    - os: linux
+      dist: trusty
+      compiler: gcc
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - g++-7
+      env:
+        - CC_COMPILER=gcc-7
+        - CXX_COMPILER=g++-7
+
+    - os: linux
+      dist: trusty
+      compiler: clang
+      addons:
+        apt:
+          sources:
+            - llvm-toolchain-trusty-5.0
+          packages:
+            - clang-5.0
+            - libc++-dev
+            - libc++abi-dev
+      env:
+        - CC_COMPILER=clang-5.0
+        - CXX_COMPILER=clang++-5.0
+
+before_install:
+    - eval "${MATRIX_EVAL}";
+
+install:
+
+  ############################################################################
+  # All the dependencies are installed in ${TRAVIS_BUILD_DIR}/deps/
+  ############################################################################
+  - DEPS_DIR="${TRAVIS_BUILD_DIR}/deps";
+  - mkdir -p ${DEPS_DIR} && cd ${DEPS_DIR};
+
+
+
+  ############################################################################
+  # Setup default versions and override compiler if needed
+  ############################################################################
+  - if [[ "${LLVM_VERSION}" == "default" ]]; then LLVM_VERSION=3.9.0; fi
+  - if [[ "${BOOST_VERSION}" == "default" ]]; then BOOST_VERSION=1.66.0; fi
+
+  - export CC=${CC_COMPILER}
+  - export CXX=${CXX_COMPILER}
+  - export CMAKE_OPTIONS+=" -DCMAKE_C_COMPILER=${CC_COMPILER}"
+  - export CMAKE_OPTIONS+=" -DCMAKE_CXX_COMPILER=${CXX_COMPILER}"
+
+  - if [[ "${CXX}" == clang* ]]; then
+      CMAKE_OPTIONS+=" -DUSE_LIBC++=TRUE";
+    fi
+  ############################################################################
+  # Install Boost
+  ############################################################################
+  - |
+    if [[ "${BOOST_VERSION}" != "" ]]; then
+      BOOST_DIR=${DEPS_DIR}/boost-${BOOST_VERSION};
+      BOOST_ROOT=${BOOST_DIR}/build;
+      if [[ -z "$(ls -A ${BOOST_DIR})" ]]; then
+        BOOST_URL="http://sourceforge.net/projects/boost/files/boost/${BOOST_VERSION}/boost_${BOOST_VERSION//\./_}.tar.gz";
+        mkdir -p ${BOOST_DIR};
+        mkdir -p ${BOOST_ROOT};
+        { travis_retry wget --quiet -O - ${BOOST_URL} | tar --strip-components=1 -xz -C ${BOOST_DIR}; } || exit 1;
+        cd ${BOOST_DIR};
+        ./bootstrap.sh --prefix=${BOOST_ROOT} --with-libraries=context,coroutine;
+        ./b2 --build-type=complete --layout=tagged --prefix=${BOOST_ROOT} threading=multi install
+      fi
+      CMAKE_OPTIONS+=" -DBOOST_ROOT=${BOOST_ROOT}";
+    fi
+
+  ############################################################################
+  # Install cURL
+  ############################################################################
+  - |
+    if [[ "${CURL_VERSION}" != "" ]]; then
+      CURL_DIR=${DEPS_DIR}/curl-${CURL_VERSION};
+      CURL_ROOT=${CURL_DIR}/build;
+      if [[ -z "$(ls -A ${CURL_DIR})" ]]; then
+        CURL_URL="https://curl.haxx.se/download/curl-${CURL_VERSION}.tar.gz";
+        mkdir -p ${CURL_DIR};
+        mkdir -p ${CURL_ROOT};
+        { travis_retry wget --quiet -O - ${CURL_URL} | tar --strip-components=1 -xz -C ${CURL_DIR}; } || exit 1;
+        cd ${CURL_DIR};
+        ./configure --prefix=${CURL_ROOT};
+        make && make install;
+      fi
+      CMAKE_OPTIONS+=" -DCURL_ROOT=${CURL_ROOT}";
+    fi
+
+  - CMAKE_OPTIONS+=" -DBUILD_TEST=on";
+  - CMAKE_OPTIONS+=" -DBUILD_EXAMPLE=on";
+
+before_script:
+  - ls ${DEPS_DIR};
+  - cd ${TRAVIS_BUILD_DIR};
+  - echo ${CMAKE_OPTIONS};
+  - mkdir build;
+  - cd build;
+  - cmake `echo ${CMAKE_OPTIONS}` ..;
+
+
+script:
+  - ls;
+  - pwd;
+  - (cd ${TRAVIS_BUILD_DIR}/build && make -j 2);
+
+notifications:
+  webhooks:
+    urls: https://webhooks.gitter.im/e/6aaa707cc6dba45aae8d
+    on_success: change
+    on_failure: always
