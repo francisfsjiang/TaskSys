@@ -53,8 +53,8 @@ cd TaskSys/bin
 
 ## Continues Integration Build
 
-- Ubuntu 16.04(trusty) GCC-7
-- Ubuntu 16.04(trusty) Clang-5
+- Ubuntu 14.04(trusty) GCC-7
+- Ubuntu 14.04(trusty) Clang-5
 - macOS Xcode-10
 
 Status: [![Build Status](https://travis-ci.org/francisfsjiang/TaskSys.svg?branch=master)](https://travis-ci.org/francisfsjiang/TaskSys) 
@@ -63,6 +63,8 @@ Status: [![Build Status](https://travis-ci.org/francisfsjiang/TaskSys.svg?branch
 ## TODO
 
 - Logging support.
+
+- Performance benchmark.
 
 - More test cases.
 
