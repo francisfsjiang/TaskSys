@@ -10,15 +10,14 @@ namespace TaskSys {
     class TaskQueue;
 }
 
-class TaskProducer {
-public:
-    TaskProducer(int);
-    TaskProducer(int, int, int);
-    TaskProducer(std::initializer_list<TaskSys::Task>);
+// 随机生成指定个数个Task
+void run_task_producer_random(std::shared_ptr<TaskSys::TaskQueue>, int);
 
-private:
-    std::vector<std::shared_ptr<TaskSys::Task>> tasks_;
-};
+// 生成指定个数个Task，并且指定Task需要的处理时间和失败次数
+void run_task_producer(std::shared_ptr<TaskSys::TaskQueue>, int, int, int);
+
+// 根据Task列表生成Task
+void run_task_producer_list(std::shared_ptr<TaskSys::TaskQueue>, std::vector<TaskSys::Task>);
 
 void run_task_consumer(std::shared_ptr<TaskSys::TaskQueue> task_queue);
 

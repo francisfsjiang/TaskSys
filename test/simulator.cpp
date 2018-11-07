@@ -9,11 +9,11 @@ using namespace std;
 using namespace TaskSys;
 
 
-void run_task_producer(shared_ptr<TaskQueue> task_queue, int num) {
+void run_task_producer_random(shared_ptr<TaskQueue> task_queue, int num) {
 
     std::random_device rd;
     std::mt19937 gen(rd());
-    std::uniform_int_distribution<> processing_time_dis(0, 3);
+    std::uniform_int_distribution<> processing_time_dis(0, 2);
     std::uniform_int_distribution<> fail_time_dis(0, 1);
 
     for(int i = 0; i < num; ++i) {
@@ -30,7 +30,7 @@ void run_task_producer(shared_ptr<TaskQueue> task_queue, int num, int processing
 
 }
 
-void run_task_producer(shared_ptr<TaskQueue> task_queue, vector<TaskSys::Task> list)
+void run_task_producer_list(shared_ptr<TaskQueue> task_queue, const vector<Task>& list)
 {
     for(auto const task: list) {
         task_queue->add(shared_ptr<Task>(new Task(task)));
@@ -44,7 +44,14 @@ void run_task_consumer(shared_ptr<TaskQueue> task_queue) {
         shared_ptr<Task> task = task_queue->get();
         if(!task) continue;
 
-        task->process();
+        int ret = task->process();
+        if(ret != 0) {
+            task_queue->add(task);
+        }
+        else {
+            task_queue->done(task);
+        }
+
     }
 
 }

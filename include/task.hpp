@@ -5,7 +5,7 @@ namespace TaskSys {
 
     class Task {
     public:
-        Task(int, int, int);
+        Task(unsigned long long, int, int);
         Task(int, int);
         ~Task();
 
@@ -14,7 +14,7 @@ namespace TaskSys {
         int process();
     private:
 
-        int id_;
+        unsigned long long id_;
         int processing_time_;
         int fail_time_;
 

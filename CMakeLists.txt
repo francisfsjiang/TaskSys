@@ -66,16 +66,6 @@ endif()
 link_directories(${PROJECT_SOURCE_DIR}/lib)
 include_directories(${PROJECT_SOURCE_DIR}/include)
 
-############################################################
-#
-# Boost Config
-#
-############################################################
-
-find_package(Boost REQUIRED COMPONENTS unit_test_framework REQUIRED)
-link_directories(${Boost_LIBRARY_DIRS})
-include_directories(${Boost_INCLUDE_DIRS})
-
 
 set(DEP_LIBS )
 
@@ -92,6 +82,10 @@ target_link_libraries(tasksys_dynamic tasksys ${DEP_LIBS})
 
 
 if (BUILD_TEST)
+
+    find_package(Boost REQUIRED COMPONENTS unit_test_framework REQUIRED)
+    link_directories(${Boost_LIBRARY_DIRS})
+    include_directories(${Boost_INCLUDE_DIRS})
 
     set(TEST_SRC_FILES
             test/simulator.cpp
