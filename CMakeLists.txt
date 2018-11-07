@@ -72,7 +72,7 @@ include_directories(${PROJECT_SOURCE_DIR}/include)
 #
 ############################################################
 
-find_package(Boost REQUIRED COMPONENTS system filesystem unit_test_framework REQUIRED)
+find_package(Boost REQUIRED COMPONENTS unit_test_framework REQUIRED)
 link_directories(${Boost_LIBRARY_DIRS})
 include_directories(${Boost_INCLUDE_DIRS})
 
