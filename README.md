@@ -6,8 +6,8 @@
 
 ## Dependencies
 
-- C++ > 11
-- Boost{test} > 1.68
+- C++ >= C++11
+- Boost{test} >= 1.68
 
 ## How to Build
 
@@ -51,7 +51,7 @@ cd TaskSys/bin
 
 ```
 
-## Continues Integration Environment
+## Continues Integration Build
 
 - Ubuntu 16.04(trusty) GCC-7
 - Ubuntu 16.04(trusty) Clang-5
@@ -66,4 +66,4 @@ Status: [![Build Status](https://travis-ci.org/francisfsjiang/TaskSys.svg?branch
 
 - More test cases.
 
-- Check simulator's thread's return value.
+- Check simulator's thread's return value for test.
