@@ -73,7 +73,7 @@ namespace TaskSys {
 
     void TaskQueue::shutdown() {
         unique_lock<mutex> lock(queue_lock_);
-        cout << "Shutting down." << endl;
+//        cout << "Shutting down." << endl;
         closed_ = true;
         queue_cond_.notify_all();
     }

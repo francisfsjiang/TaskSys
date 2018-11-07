@@ -21,7 +21,7 @@ namespace TaskSys{
     }
 
     TaskSys::Task::~Task() {
-        cout << "Task " << id_ << " destructing." << endl;
+//        cout << "Task " << id_ << " destructing." << endl;
     }
 
     int TaskSys::Task::get_id() {
@@ -30,7 +30,7 @@ namespace TaskSys{
 
     int Task::process() {
 
-        cout << "Processing " << id_ << endl;
+//        cout << "Processing " << id_ << endl;
 
         if(fail_time_ > 0) {
             --fail_time_;
@@ -40,7 +40,8 @@ namespace TaskSys{
         if(processing_time_ > 0) {
             std::this_thread::sleep_for(std::chrono::seconds(processing_time_));
         }
-        cout << "Processing " << id_ << " finished." << endl;
+
+//        cout << "Processing " << id_ << " finished." << endl;
 
         return 0;
     }
