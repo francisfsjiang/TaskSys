@@ -72,12 +72,12 @@ include_directories(${PROJECT_SOURCE_DIR}/include)
 #
 ############################################################
 
-find_package(Boost REQUIRED COMPONENTS context coroutine)
+find_package(Boost REQUIRED COMPONENTS test)
 link_directories(${Boost_LIBRARY_DIRS})
 include_directories(${Boost_INCLUDE_DIRS})
 
 
-set(DEP_LIBS boost_coroutine-mt boost_context-mt curl)
+set(DEP_LIBS boost_test-mt)
 
 set(LIBS tasksys ${DEP_LIBS})
 
