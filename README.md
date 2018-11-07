@@ -27,14 +27,21 @@ make
 
 ```
 
+Now the built libraries are in `lib/`.
+
 Or build with unit test.
 ```bash
 cmake -DBUILD_TEST=on ..
 ```
 
-Or build with custom Boost.
+Or build with custom Boost dir.
 ```bash
-cmake -DBOOST_ROOT=${BOOST_ROOT} ..
+cmake -DBOOST_ROOT=/path/to/boost/ ..
+```
+
+Or build with in release mode.
+```bash
+cmake -DCMAKE_BUILD_TYPE=Release ..
 ```
 
 ## Run unit test
