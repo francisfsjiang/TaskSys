@@ -2,6 +2,7 @@
 #define _TASKSYS_SIMULATOR_HPP_
 
 #include <initializer_list>
+#include <memory>
 #include <vector>
 
 namespace TaskSys {

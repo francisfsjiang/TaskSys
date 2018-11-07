@@ -88,7 +88,7 @@ add_library(tasksys STATIC ${SRC_FILES} )
 
 add_library(tasksys_dynamic SHARED src/task_queue.cpp)
 set_target_properties(tasksys_dynamic PROPERTIES OUTPUT_NAME tasksys)
-target_link_libraries(tasksys_dynamic TASKSYS ${DEP_LIBS})
+target_link_libraries(tasksys_dynamic tasksys ${DEP_LIBS})
 
 
 if (BUILD_TEST)
