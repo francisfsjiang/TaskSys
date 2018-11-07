@@ -77,7 +77,7 @@ link_directories(${Boost_LIBRARY_DIRS})
 include_directories(${Boost_INCLUDE_DIRS})
 
 
-set(DEP_LIBS boost_unit_test_framework)
+set(DEP_LIBS )
 
 set(LIBS tasksys ${DEP_LIBS})
 
