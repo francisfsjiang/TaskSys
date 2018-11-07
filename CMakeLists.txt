@@ -77,34 +77,29 @@ link_directories(${Boost_LIBRARY_DIRS})
 include_directories(${Boost_INCLUDE_DIRS})
 
 
-############################################################
-#
-# CURL Config
-#
-############################################################
-if(CURL_ROOT)
-    set(CURL_INCLUDE_DIR ${CURL_ROOT}/include)
-    set(CURL_LIBRARY ${CURL_ROOT}/lib)
-endif()
-find_package(CURL REQUIRED)
-link_directories(${CURL_LIBRARIES})
-include_directories(${CURL_INCLUDE_DIRS})
-
 set(DEP_LIBS boost_coroutine-mt boost_context-mt curl)
-set(LIBS TASKSYS ${DEP_LIBS})
+
+set(LIBS tasksys ${DEP_LIBS})
 
 message("Building libraries: ${LIBS}")
 message("Building flags: ${CMAKE_CXX_FLAGS}")
 
-add_library(TASKSYS STATIC ${SRC_FILES} )
+add_library(tasksys STATIC ${SRC_FILES} )
 
-add_library(TASKSYS_dynamic SHARED src/task_queue.cpp)
-set_target_properties(TASKSYS_dynamic PROPERTIES OUTPUT_NAME TASKSYS)
-target_link_libraries(TASKSYS_dynamic TASKSYS ${DEP_LIBS})
+add_library(tasksys_dynamic SHARED src/task_queue.cpp)
+set_target_properties(tasksys_dynamic PROPERTIES OUTPUT_NAME tasksys)
+target_link_libraries(tasksys_dynamic TASKSYS ${DEP_LIBS})
+
 
 if (BUILD_TEST)
-    add_executable(log_test        test/log_test.cpp)
-    target_link_libraries(log_test         ${LIBS})
+
+    set(TEST_SRC_FILES
+            test/simulator.cpp
+            test/test.cpp
+            )
+    add_executable(test ${TEST_SRC_FILES})
+    target_link_libraries(test ${LIBS})
+
 endif()
 
 if (BUILD_EXAMPLE)
