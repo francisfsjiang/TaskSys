@@ -102,9 +102,9 @@ if (BUILD_TEST)
 
 endif()
 
-if (BUILD_EXAMPLE)
-    add_subdirectory(example)
-endif()
+#if (BUILD_EXAMPLE)
+#    add_subdirectory(example)
+#endif()
 
 message("${INCLUDE_DIRECTORIES}")
 message("${CXX_INCLUDE}")
